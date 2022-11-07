@@ -1,11 +1,9 @@
 import java.io.*;
 
 public class Basket {
-
     private int[] amounts;
     private String[] products;
     private int[] prices;
-
     private int totalPrice;
 
     public Basket(String[] products, int[] prices) {
@@ -97,5 +95,36 @@ public class Basket {
         this.amounts = amounts;
     }
 
+    public void saveBin(File file) {
+
+        SaveBasket saveBasket = new SaveBasket(this.products, this.prices, this.amounts);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(saveBasket);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    public static Basket loadFromBinFile(File file) {
+
+        SaveBasket saveBasket = null;
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            saveBasket = (SaveBasket) ois.readObject();
+            Basket basket = new Basket(saveBasket.getProducts(), saveBasket.getPrices());
+            basket.setAmounts(saveBasket.getAmount());
+            return basket;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return null;
+
+    }
 
 }

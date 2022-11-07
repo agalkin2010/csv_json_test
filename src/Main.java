@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
 
     static final String fileName = "basket.txt";
+    static final String fileNameBin = "basket.bin";
 
     public static void main(String[] args) {
         //create products a nd prices arrays
@@ -12,9 +13,9 @@ public class Main {
         int[] prices = {100, 200, 300};
 
         Basket basket;
-        File file = new File(fileName);
+        File file = new File(fileNameBin);
         if (file.exists() && file.length() > 0) {
-            basket = Basket.loadFromTxtFile(file);
+            basket = Basket.loadFromBinFile(file);
         } else {
             basket = new Basket(products, prices);
         }
@@ -27,10 +28,6 @@ public class Main {
 
         //create variables
         Scanner scanner = new Scanner(System.in);
-        int[] order = new int[products.length];
-        boolean[] selected = new boolean[products.length];
-        Arrays.fill(order, 0);
-        int totalPrice = 0;
 
         //infinite cycle input data from user
         while (true) {
@@ -49,7 +46,7 @@ public class Main {
             int pieces = Integer.parseInt(inputData[1]);
 
             basket.addToCart(number, pieces);
-            basket.saveTxt(file);
+            basket.saveBin(file);
 
         }
 
