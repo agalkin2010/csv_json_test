@@ -40,26 +40,26 @@ public class Basket {
 
     public void saveTxt(File textFile) {
 
-            try (FileWriter writer = new FileWriter(textFile, false)) {
-                String sProducts = this.products[0];
-                String sPrices = String.valueOf(this.prices[0]);
-                String sAmounts = String.valueOf(this.amounts[0]);
-                if (this.products.length > 1) {
-                    for (int i = 1; i < this.products.length; i++) {
-                        sProducts += " " + this.products[i];
-                        sPrices += " " + String.valueOf(this.prices[i]);
-                        sAmounts += " " + String.valueOf(this.amounts[i]);
-                    }
+        try (FileWriter writer = new FileWriter(textFile, false)) {
+            String sProducts = this.products[0];
+            String sPrices = String.valueOf(this.prices[0]);
+            String sAmounts = String.valueOf(this.amounts[0]);
+            if (this.products.length > 1) {
+                for (int i = 1; i < this.products.length; i++) {
+                    sProducts += " " + this.products[i];
+                    sPrices += " " + String.valueOf(this.prices[i]);
+                    sAmounts += " " + String.valueOf(this.amounts[i]);
                 }
-                writer.write(sProducts);
-                writer.append("\n");
-                writer.write(sPrices);
-                writer.append("\n");
-                writer.write(sAmounts);
-                writer.flush();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
             }
+            writer.write(sProducts);
+            writer.append("\n");
+            writer.write(sPrices);
+            writer.append("\n");
+            writer.write(sAmounts);
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public static Basket loadFromTxtFile(File textFile) {

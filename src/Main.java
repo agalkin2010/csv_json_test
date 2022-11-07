@@ -7,15 +7,15 @@ public class Main {
     static final String fileName = "basket.txt";
 
     public static void main(String[] args) {
-        //creat products a nd prices arrays
+        //create products a nd prices arrays
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
         int[] prices = {100, 200, 300};
 
         Basket basket;
         File file = new File(fileName);
-        if(file.exists() && file.length() > 0){
+        if (file.exists() && file.length() > 0) {
             basket = Basket.loadFromTxtFile(file);
-        }else{
+        } else {
             basket = new Basket(products, prices);
         }
 
