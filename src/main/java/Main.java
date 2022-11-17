@@ -1,27 +1,35 @@
 import java.io.File;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
-    static final String fileName = "basket.txt";
-    static final String jsonFileName = "basket.json";
-    static final String csvFileName = "log.csv";
+    static final String setFileName = "shop.xml";
 
     public static void main(String[] args) {
-        //create products a nd prices arrays
+        //create products and prices arrays
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
         int[] prices = {100, 200, 300};
 
+        Settings settings = new Settings();
+        File set = new File(setFileName);
+        settings.readSettings(set);
+
+        File fileLoad = new File(settings.loadFileName);
+        File fileSave = new File(settings.saveFileName);
+
         Basket basket;
-        File file = new File(jsonFileName);
-        if (file.exists() && file.length() > 0) {
-            basket = Basket.loadFromJSON(file);
+
+        if (settings.enableLoad && fileLoad.exists() && fileLoad.length() > 0) {
+            if (settings.loadFileFormat.equals("json")) basket = Basket.loadFromJSON(fileLoad);
+            else if (settings.loadFileFormat.equals("text")) basket = Basket.loadFromTxtFile(fileLoad);
+            else {
+                basket = new Basket(products, prices);
+            }
         } else {
             basket = new Basket(products, prices);
         }
 
-        File csvFile = new File(csvFileName);
+        File csvFile = new File(settings.logFileName);
         ClientLog clientLog = new ClientLog();
 
         //print out available list
@@ -32,10 +40,6 @@ public class Main {
 
         //create variables
         Scanner scanner = new Scanner(System.in);
-        int[] order = new int[products.length];
-        boolean[] selected = new boolean[products.length];
-        Arrays.fill(order, 0);
-        int totalPrice = 0;
 
         //infinite cycle input data from user
         while (true) {
@@ -54,7 +58,10 @@ public class Main {
             int pieces = Integer.parseInt(inputData[1]);
 
             basket.addToCart(number, pieces);
-            basket.saveJSON(file);
+            if (settings.enableSave) {
+                if (settings.saveFileFormat.equals("json")) basket.saveJSON(fileSave);
+                else if (settings.saveFileFormat.equals("text")) basket.saveTxt(fileSave);
+            }
             clientLog.log(number + 1, pieces);
 
         }
@@ -63,7 +70,7 @@ public class Main {
         System.out.println();
 
         basket.printCart();
-        clientLog.exportAsCSV(csvFile);
+        if (settings.enableLog) clientLog.exportAsCSV(csvFile);
 
     }
 
