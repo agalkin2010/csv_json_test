@@ -1,4 +1,10 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.*;
+import java.util.List;
 
 public class Basket {
 
@@ -61,6 +67,36 @@ public class Basket {
         }
     }
 
+
+    public void saveJSON(File jsonfile) {
+        JSONObject obj = new JSONObject();
+
+        JSONArray listProducts = new JSONArray();
+        for (int i = 0; i < this.products.length; i++) {
+            listProducts.add(this.products[i]);
+        }
+        JSONArray listPrices = new JSONArray();
+        for (int i = 0; i < this.prices.length; i++) {
+            listPrices.add(this.prices[i]);
+        }
+        JSONArray listAmounts = new JSONArray();
+        for (int i = 0; i < this.amounts.length; i++) {
+            listAmounts.add(this.amounts[i]);
+        }
+
+        obj.put("Products", listProducts);
+        obj.put("Prices", listPrices);
+        obj.put("Amounts", listAmounts);
+
+        try (FileWriter writer = new FileWriter(jsonfile)) {
+            writer.write(obj.toJSONString());
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static Basket loadFromTxtFile(File textFile) {
 
         try (FileReader reader = new FileReader(textFile)) {
@@ -91,6 +127,52 @@ public class Basket {
 
         return null;
 
+    }
+
+    public static Basket loadFromJSON(File jsonfile) {
+        String[] productNames;
+        int[] productPrices;
+        int[] productAmounts;
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(jsonfile));
+            JSONObject jsonobject = (JSONObject) obj;
+
+            JSONArray products = (JSONArray) jsonobject.get("Products");
+            productNames = new String[products.size()];
+            productPrices = new int[products.size()];
+            productAmounts = new int[products.size()];
+            int i = 0;
+            for (Object product : products) {
+                productNames[i] = product.toString();
+                i++;
+            }
+
+            JSONArray prices = (JSONArray) jsonobject.get("Prices");
+            i = 0;
+            for (Object price : prices) {
+                productPrices[i] = Integer.valueOf(price.toString());
+                i++;
+            }
+
+            JSONArray amounts = (JSONArray) jsonobject.get("Amounts");
+            i = 0;
+            for (Object amount : amounts) {
+                productAmounts[i] = Integer.valueOf(amount.toString());
+                i++;
+            }
+
+            Basket basket = new Basket(productNames, productPrices);
+            basket.setAmounts(productAmounts);
+
+            return basket;
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public void setAmounts(int[] amounts) {

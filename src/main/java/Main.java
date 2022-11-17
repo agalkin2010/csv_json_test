@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class Main {
 
     static final String fileName = "basket.txt";
+    static final String jsonFileName = "basket.json";
+    static final String csvFileName = "log.csv";
 
     public static void main(String[] args) {
         //create products a nd prices arrays
@@ -12,12 +14,15 @@ public class Main {
         int[] prices = {100, 200, 300};
 
         Basket basket;
-        File file = new File(fileName);
+        File file = new File(jsonFileName);
         if (file.exists() && file.length() > 0) {
-            basket = Basket.loadFromTxtFile(file);
+            basket = Basket.loadFromJSON(file);
         } else {
             basket = new Basket(products, prices);
         }
+
+        File csvFile = new File(csvFileName);
+        ClientLog clientLog = new ClientLog();
 
         //print out available list
         System.out.println("Список возможных товаров для покупки");
@@ -49,7 +54,8 @@ public class Main {
             int pieces = Integer.parseInt(inputData[1]);
 
             basket.addToCart(number, pieces);
-            basket.saveTxt(file);
+            basket.saveJSON(file);
+            clientLog.log(number + 1, pieces);
 
         }
 
@@ -57,6 +63,7 @@ public class Main {
         System.out.println();
 
         basket.printCart();
+        clientLog.exportAsCSV(csvFile);
 
     }
 
