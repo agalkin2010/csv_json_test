@@ -40,21 +40,21 @@ public class Settings {
                     String setName = listChield.item(j).getNodeName();
                     String setValue = listChield.item(j).getTextContent();
 
-                    if (chieldNode.getNodeName() == "load") {
-                        if (setName == "enabled") enableLoad = Boolean.valueOf(setValue);
-                        if (setName == "fileName") loadFileName = setValue;
-                        if (setName == "format") loadFileFormat = setValue;
+                    if (chieldNode.getNodeName().equals("load")) {
+                        if (setName.equals("enabled")) enableLoad = Boolean.valueOf(setValue);
+                        if (setName.equals("fileName")) loadFileName = setValue;
+                        if (setName.equals("format")) loadFileFormat = setValue;
                     }
 
-                    if (chieldNode.getNodeName() == "save") {
-                        if (setName == "enabled") enableSave = Boolean.valueOf(setValue);
-                        if (setName == "fileName") saveFileName = setValue;
-                        if (setName == "format") saveFileFormat = setValue;
+                    if (chieldNode.getNodeName().equals("save")) {
+                        if (setName.equals("enabled")) enableSave = Boolean.valueOf(setValue);
+                        if (setName.equals("fileName")) saveFileName = setValue;
+                        if (setName.equals("format")) saveFileFormat = setValue;
                     }
 
-                    if (chieldNode.getNodeName() == "log") {
-                        if (setName == "enabled") enableLog = Boolean.valueOf(setValue);
-                        if (setName == "fileName") logFileName = setValue;
+                    if (chieldNode.getNodeName().equals("log")) {
+                        if (setName.equals("enabled")) enableLog = Boolean.valueOf(setValue);
+                        if (setName.equals("fileName")) logFileName = setValue;
                     }
                 }
             }

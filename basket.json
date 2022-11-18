@@ -1,1 +1,1 @@
-{"Prices":[100,200,300],"Products":["Хлеб","Яблоки","Молоко"],"Amounts":[6,6,6]}
+{"productsName":["Хлеб","Яблоки","Молоко"],"productPrice":[100,200,300],"productAmount":[2,4,6]}
